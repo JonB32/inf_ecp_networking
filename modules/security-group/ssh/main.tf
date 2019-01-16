@@ -1,5 +1,5 @@
 module "sg" {
-  source = "../../"
+  source = "../../../"
 
   create          = "${var.create}"
   name            = "${var.name}"

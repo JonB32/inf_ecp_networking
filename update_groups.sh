@@ -79,8 +79,8 @@ main() {
 
     echo "Making group: $group"
 
-    mkdir -p "modules/$group"
-    cp modules/_templates/{main,outputs,variables}.tf "modules/$group"
+    mkdir -p "modules/security-group/$group"
+    cp modules/security-group/_templates/{main,outputs,variables}.tf "modules/security-group/$group"
 
     # Get group values
     ingress_rules=$(get_auto_value "$auto_groups_data" "$group" "ingress_rules")
@@ -123,7 +123,7 @@ main() {
     ingress_with_self=$(echo "$ingress_with_self" | jq -rc "[{rule:.[]}]" | tr ':' '=')
     egress_with_self=$(echo "$egress_with_self" | jq -rc "[{rule:.[]}]" | tr ':' '=')
 
-    cat <<EOF > "modules/$group/auto_values.tf"
+    cat <<EOF > "modules/security-group/$group/auto_values.tf"
 # This file was generated from values defined in rules.tf using update_groups.sh.
 ###################################
 # DO NOT CHANGE THIS FILE MANUALLY
@@ -188,7 +188,7 @@ variable "auto_number_of_computed_egress_with_self" {
 }
 EOF
 
-    cat <<EOF > "modules/$group/README.md"
+    cat <<EOF > "modules/security-group/$group/README.md"
 # $group - AWS EC2-VPC Security Group Terraform module
 ## Usage
 \`\`\`hcl
@@ -204,13 +204,13 @@ EOF
 
     list_of_modules=$(echo "$list_of_modules"; echo "* [$group](https://github.com/terraform-aws-modules/terraform-aws-security-group/tree/master/modules/$group)")
 
-    terraform fmt "modules/$group"
+    terraform fmt "modules/security-group/$group"
   done
 
 
   echo "Updating list of security group modules"
 
-  cat <<EOF > modules/README.md
+  cat <<EOF > modules/security-group/README.md
 List of Security Groups implemented as Terraform modules
 ========================================================
 $list_of_modules
